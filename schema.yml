@@ -1,0 +1,9 @@
+# models/jaffleshop_sources.yml
+version: 2
+
+sources:
+  - name: jaffleshop              # this is your source identifier
+    database: dbt_demo_db         # the Snowflake database in your connection
+    schema: jaffleshop_schema     # the actual schema where STG_CUSTOMERS lives
+    tables:
+      - name: stg_customers       # table name in Snowflake
