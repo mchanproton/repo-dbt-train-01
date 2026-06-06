@@ -4,5 +4,5 @@
 select  
     order_date AS order__date,
     sales AS sales_revenue
-from {{ ref('my_first_dbt_model') }}
+from {{ ref('t1_bronze_table') }}
 where order_date is not null 
