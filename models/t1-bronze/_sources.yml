@@ -4,36 +4,14 @@ sources:
   - name: salesforce_raw
     database: dbt_cloud_catalog
     schema: dbt_schema
-    freshness:
-      warn_after:
-        count: 24
-        period: hour
-      error_after:
-        count: 48
-        period: hour
-    loaded_at_field: _loaded_at
+    config:
+      freshness:
+        warn_after:
+          count: 48
+          period: hour
+        error_after:
+          count: 72
+          period: hour
+      loaded_at_field: _loaded_at
     tables:
       - name: t1_sfdc_oppty
-        description: >
-          Simulated SFDC Opportunity table. 
-          Ingested via Databricks notebook on Monday, Wednesday, and Friday.
-        columns:
-          - name: opportunity_id
-            description: Primary key — unique SFDC Opportunity ID
-            tests:
-              - unique
-              - not_null
-          - name: account_id
-            description: Foreign key to the Account object
-            tests:
-              - not_null
-          - name: stage_name
-            description: Current pipeline stage
-          - name: amount
-            description: Deal value in USD
-          - name: close_date
-            description: Expected close date
-          - name: is_deleted
-            description: Soft-delete flag — filter with `where is_deleted = false`
-          - name: _loaded_at
-            description: Ingestion timestamp — used for source freshness checks

@@ -4,7 +4,6 @@ semantic_models:
       agg_time_dimension: close_date
     description: >
       Fact model for SFDC Opportunities. One row per opportunity.
-      Use this semantic model to analyze pipeline, revenue, and win rates.
     model: ref('t3_sfdc_opportunity')
 
     entities:
@@ -20,41 +19,15 @@ semantic_models:
         type: time
         type_params:
           time_granularity: day
-      - name: created_date
-        type: time
-        type_params:
-          time_granularity: day
       - name: stage_name
         type: categorical
       - name: pipeline_stage_group
-        type: categorical
-      - name: is_won
-        type: categorical
-      - name: is_closed
         type: categorical
 
     measures:
       - name: total_amount
         description: Sum of all opportunity amounts
         agg: sum
-        expr: amount
-      - name: opportunity_count
-        description: Count of opportunities
-        agg: count
-        expr: opportunity_id
-      - name: won_opportunity_count
-        description: Count of closed-won opportunities
-        agg: count
-        expr: opportunity_id
-        filter:
-          - "{{ Dimension('opportunity__is_won') }} = true"
-      - name: avg_days_to_close
-        description: Average days between created and close date
-        agg: average
-        expr: days_to_close
-      - name: avg_deal_size
-        description: Average opportunity amount
-        agg: average
         expr: amount
 
 metrics:
@@ -63,40 +36,3 @@ metrics:
     type: simple
     type_params:
       measure: total_amount
-
-  - name: total_opportunities
-    description: Total number of opportunities
-    type: simple
-    type_params:
-      measure: opportunity_count
-
-  - name: total_won_opportunities
-    description: Number of closed-won opportunities
-    type: simple
-    type_params:
-      measure: won_opportunity_count
-
-  - name: win_rate
-    description: Percentage of closed opportunities that were won
-    type: derived
-    type_params:
-      expr: won_opportunity_count * 1.0 / opportunity_count
-      metrics:
-        - name: won_opportunity_count
-          filter:
-            - "{{ Dimension('opportunity__is_closed') }} = true"
-        - name: opportunity_count
-          filter:
-            - "{{ Dimension('opportunity__is_closed') }} = true"
-
-  - name: average_deal_size
-    description: Average dollar value per opportunity
-    type: simple
-    type_params:
-      measure: avg_deal_size
-
-  - name: average_sales_cycle
-    description: Average days to close an opportunity
-    type: simple
-    type_params:
-      measure: avg_days_to_close
