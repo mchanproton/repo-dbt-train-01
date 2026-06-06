@@ -1,12 +1,18 @@
+{{ config(materialized='table') }}
 
-models:
-  - name: metricflow_time_spine
-    description: >
-      Required by the dbt Semantic Layer. Provides a continuous 
-      date series for MetricFlow time-based calculations.
-    time_spine:
-      standard_granularity_column: date_day
-    columns:
-      - name: date_day
-        granularity: day
- 
+with days as (
+
+    {{
+        dbt.date_spine(
+            datepart="day",
+            start_date="cast('2020-01-01' as date)",
+            end_date="cast('2030-12-31' as date)"
+        )
+    }}
+
+)
+
+select
+    cast(date_day as date) as date_day
+
+from days
