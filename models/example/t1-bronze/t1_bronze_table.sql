@@ -11,17 +11,14 @@
 
 with source_data as (
 
-    select 1 as id
+    select '2025-01-01' as order_date, 
+           111 as sales
     union all
-    select null as id
+    select '2025-01-02' as order_date, 
+           112 as sales
 
 )
 
 select *
 from source_data
 
-/*
-    Uncomment the line below to remove records with null `id` values
-*/
-
--- where id is not null
